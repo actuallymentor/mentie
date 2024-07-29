@@ -7,9 +7,9 @@
 export const wait = ( ms, error=false ) => new Promise( ( res, rej ) => setTimeout( error ? rej : res, ms ) )
 
 /**
- * Converts a timestamp to RFC-822 date format.
+ * Converts a timestamp to RFC-822 date format, specifically in GMT.
  * @param {number} timestamp - The timestamp to convert.
- * @returns {string} The RFC-822 formatted date string.
+ * @returns {string} The RFC-822 formatted date string in GMT.
  */
 export function timestamp_to_RFC822( timestamp ) {
 
@@ -18,7 +18,7 @@ export function timestamp_to_RFC822( timestamp ) {
     const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
 
     // Create a date object from the timestamp
-    const date = new Date( timestamp )
+    const date = new Date( timestamp )    
 
     // Get components of the date
     const dayOfWeek = days[date.getUTCDay()]
@@ -35,11 +35,10 @@ export function timestamp_to_RFC822( timestamp ) {
     const minutesStr = minutes < 10 ? '0' + minutes : minutes
     const secondsStr = seconds < 10 ? '0' + seconds : seconds
 
-    // Get the timezone on the running machine
-    const { timeZone } = Intl.DateTimeFormat().resolvedOptions()
+    
 
     // Construct the RFC-822 date string
-    return `${ dayOfWeek }, ${ dayStr } ${ month } ${ year } ${ hoursStr }:${ minutesStr }:${ secondsStr } ${ timeZone }`
+    return `${ dayOfWeek }, ${ dayStr } ${ month } ${ year } ${ hoursStr }:${ minutesStr }:${ secondsStr } GMT`
 }
 
 /**

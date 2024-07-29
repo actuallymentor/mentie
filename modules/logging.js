@@ -15,7 +15,7 @@ import { dev, loglevel } from "./environment.js"
 export function log( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'error', 'warn', 'info' ]
+    const levels = [ 'info' ]
     const should_log = dev || levels.includes( loglevel )
 
     // Log the messages if the loglevel matches
@@ -25,7 +25,7 @@ export function log( ...messages ) {
 
 /**
  * Logs the provided info messages to the console.
- * Only logs in development mode OR if ?loglevel= or LOG_LEVEL= is set to one of the following: 'error', 'warn'
+ * Only logs if ?loglevel= or LOG_LEVEL= is set to: 'info'
  * 🎯 Goal: log info trace messages used only for extremely granular debugging
  * @example log.info( `Retreived key '${ key }' of type '${ typeof key }' from localstorage: `, cache )
  * @param {...any} messages - The messages to be logged.
@@ -33,8 +33,8 @@ export function log( ...messages ) {
 log.info = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'error', 'warn', 'info' ]
-    const should_log = dev || levels.includes( loglevel )
+    const levels = [ 'info' ]
+    const should_log = levels.includes( loglevel )
 
     // Log the messages if the loglevel matches
     if( should_log ) console.info( ...messages )
@@ -43,7 +43,7 @@ log.info = function( ...messages ) {
 
 /**
  * Logs the provided info messages to the console.
- * Only logs in development mode OR if ?loglevel= or LOG_LEVEL= is set to one of the following: 'error', 'warn'
+ * Only logs in development mode OR if ?loglevel= or LOG_LEVEL= is set to one of the following: 'warn', 'info'
  * 🎯 Goal: log warnings of things that should not happen, but do not break functionality
  * @example log.warn( `Transaction history was empty, this should never happen: `, history )
  * @param {...any} messages - The messages to be logged.
@@ -51,7 +51,7 @@ log.info = function( ...messages ) {
 log.warn = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'error', 'warn' ]
+    const levels = [ 'warn', 'info' ]
     const should_log = dev || levels.includes( loglevel )
 
     // Log the messages if the loglevel matches
@@ -61,7 +61,7 @@ log.warn = function( ...messages ) {
 
 /**
  * Logs the provided error messages to the console.
- * Only logs in development mode OR if ?loglevel= or LOG_LEVEL= is set to one of the following: 'error'
+ * Only logs in development mode OR if ?loglevel= or LOG_LEVEL= is set to one of the following: 'error', 'warn', 'info'
  * @scope log errors that impact proper functioning of the application
  * @example log.error( `Error connecting to database: `, error )
  * @param {...any} messages - The messages to be logged.
@@ -69,7 +69,7 @@ log.warn = function( ...messages ) {
 log.error = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'error' ]
+    const levels = [ 'error', 'warn', 'info' ]
     const should_log = dev || levels.includes( loglevel )
     if( !should_log ) return
 

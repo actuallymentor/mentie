@@ -1,3 +1,10 @@
+/**
+ * Rounds a number to the specified number of decimals.
+ *
+ * @param {number} number - The number to round.
+ * @param {number} [decimals=4] - The number of decimals to round to. Default is 4.
+ * @returns {number} The rounded number.
+ */
 export const round_number_to_decimals = ( number, decimals=4 ) => {
 
     if( number == undefined ) return ''
@@ -7,12 +14,13 @@ export const round_number_to_decimals = ( number, decimals=4 ) => {
 }
 
 /**
- * Generates a random number between 1 and the specified maximum number.
+ * Generates a random number between a minimum and maximum value.
  *
- * @param {number} max_number - The maximum number for generating the random number.
+ * @param {number} max_num - The maximum value for the random number.
+ * @param {number} [min_num=1] - The minimum value for the random number
  * @returns {number} The generated random number.
  */
-export const random_number_of_max = max_number => Math.floor( Math.random() * max_number ) + 1
+export const random_number_between = ( max_num, min_num=1 ) => Math.floor( Math.random() * ( max_num - min_num + 1 ) ) + min_num
 
 
 /**
@@ -21,4 +29,4 @@ export const random_number_of_max = max_number => Math.floor( Math.random() * ma
  * @param {number} length - The length of the random number.
  * @returns {number} - The generated random number.
  */
-export const random_number_of_length = length => Number( [ ...Array( length ) ].map( () => random_number_of_max( 9 ) ).join( '' ) )
+export const random_number_of_length = length =>  parseInt( Array.from( { length }, () => Math.floor( Math.random() * 10 ) ).join( '' ), 10 )
