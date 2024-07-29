@@ -34,13 +34,13 @@ export const dev = node_dev || web_dev
 
 /**
  * The log level for web applications.
- * @type {string}
+ * @type {string} - Log level. Valid values are: 'info', 'warn', 'error'
  */
 export const web_loglevel = is_web && new URLSearchParams( location?.search ).get( 'loglevel' )
 
 /**
  * The log level for the Node environment.
- * @type {string}
+ * @type {string} - Log level. Valid values are: 'info', 'warn', 'error'
  */
 export const node_loglevel = process.env?.LOG_LEVEL
 

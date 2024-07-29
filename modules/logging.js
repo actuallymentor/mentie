@@ -1,5 +1,17 @@
 // Import environment data
-import { dev, loglevel } from "./environment.js"
+import { dev, is_emulator, loglevel } from "./environment.js"
+
+const should_log = levels => {
+
+    // Check if the loglevel matches this call
+    const valid_levels = [ 'info', 'warn', 'error' ]
+
+    // Check if the loglevel is valid
+    if( !valid_levels.includes( loglevel ) ) console.warn( `Invalid log level: ${ loglevel }` )
+
+    return levels.includes( loglevel )
+
+}
 
 /**
  * Logs the provided messages to the console.
@@ -16,16 +28,15 @@ export function log( ...messages ) {
 
     // Check if the loglevel matches this call
     const levels = [ 'info' ]
-    const should_log = dev || levels.includes( loglevel )
 
     // Log the messages if the loglevel matches
-    if( should_log ) console.log( ...messages )
+    if( dev || should_log( levels ) ) console.log( ...messages )
 
 }
 
 /**
  * Logs the provided info messages to the console.
- * Only logs if ?loglevel= or LOG_LEVEL= is set to: 'info'
+ * Only logs in firebase emulator or if ?loglevel= or LOG_LEVEL= is set to: 'info'
  * 🎯 Goal: log info trace messages used only for extremely granular debugging
  * @example log.info( `Retreived key '${ key }' of type '${ typeof key }' from localstorage: `, cache )
  * @param {...any} messages - The messages to be logged.
@@ -34,10 +45,9 @@ log.info = function( ...messages ) {
 
     // Check if the loglevel matches this call
     const levels = [ 'info' ]
-    const should_log = levels.includes( loglevel )
 
     // Log the messages if the loglevel matches
-    if( should_log ) console.info( ...messages )
+    if( is_emulator || should_log( levels ) ) console.info( ...messages )
 
 }
 
@@ -52,10 +62,9 @@ log.warn = function( ...messages ) {
 
     // Check if the loglevel matches this call
     const levels = [ 'warn', 'info' ]
-    const should_log = dev || levels.includes( loglevel )
 
     // Log the messages if the loglevel matches
-    if( should_log ) console.warn( ...messages )
+    if( dev || should_log( levels ) ) console.warn( ...messages )
 
 }
 
@@ -71,7 +80,7 @@ log.error = function( ...messages ) {
     // Check if the loglevel matches this call
     const levels = [ 'error', 'warn', 'info' ]
     const should_log = dev || levels.includes( loglevel )
-    if( !should_log ) return
+    if( !dev || !should_log ) return
 
     // Log the messages if the loglevel matches
     console.error( ...messages )
