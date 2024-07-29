@@ -7,6 +7,10 @@ import { dev, loglevel } from "./environment.js"
  *  🎯 Goal: log informational messages about the state of the application.
  * @example log( `User state was updated to: `, user )
  * @param {...any} messages - The messages to be logged.
+ * @property {function} info - Logs info trace messages used only for extremely granular debugging.
+ * @property {function} warn - Logs warnings of things that should not happen, but do not break functionality.
+ * @property {function} error - Logs errors that impact proper functioning of the application.
+ * @property {string} loglevel - The log level used in the environment
  */
 export function log( ...messages ) {
 
@@ -22,11 +26,11 @@ export function log( ...messages ) {
 /**
  * Logs the provided info messages to the console.
  * Only logs in development mode OR if ?loglevel= or LOG_LEVEL= is set to one of the following: 'error', 'warn'
- * 🎯 Goal: log verbose trace messages used only for extremely granular debugging
- * @example log.verbose( `Retreived key '${ key }' of type '${ typeof key }' from localstorage: `, cache )
+ * 🎯 Goal: log info trace messages used only for extremely granular debugging
+ * @example log.info( `Retreived key '${ key }' of type '${ typeof key }' from localstorage: `, cache )
  * @param {...any} messages - The messages to be logged.
  */
-log.verbose = function( ...messages ) {
+log.info = function( ...messages ) {
 
     // Check if the loglevel matches this call
     const levels = [ 'error', 'warn', 'info' ]
@@ -74,3 +78,6 @@ log.error = function( ...messages ) {
     console.trace()
 
 }
+
+// Set the loglevel on the log function
+log.loglevel = loglevel

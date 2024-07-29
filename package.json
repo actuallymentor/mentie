@@ -1,6 +1,6 @@
 {
   "name": "mentie",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Mentor's toolbelt",
   "type": "module",
   "main": "index.js",
@@ -26,5 +26,9 @@
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-unused-imports": "^3.2.0",
     "husky": "^9.1.3"
+  },
+  "dependencies": {
+    "promise-parallel-throttle": "^3.5.0",
+    "promise-retry": "^2.0.1"
   }
 }
