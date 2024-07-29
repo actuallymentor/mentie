@@ -4,7 +4,7 @@
   "description": "Mentor's toolbelt",
   "main": "index.cjs",
   "scripts": {
-    "lint": "eslint --fix src",
+    "lint": "eslint --fix modules",
     "prepare": "husky"
   },
   "repository": {
