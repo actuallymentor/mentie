@@ -24,7 +24,7 @@ export const is_emulator = process.env.FUNCTIONS_EMULATOR === 'true'
 // ///////////////////////////////
 
 const node_dev = process.env.NODE_ENV === 'development'
-const web_dev = typeof location !== 'undefined' && ( `${ location.href }`.includes( 'debug=true' ) || `${ location.href }`.includes( 'debug=true' ) )
+const web_dev = typeof location !== 'undefined' && ( `${ location.href }`.includes( 'debug=true' ) || `${ location.href }`.includes( 'localhost' ) )
 
 /**
  * Represents the development environment.
