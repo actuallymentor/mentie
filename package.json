@@ -3,7 +3,7 @@
   "version": "0.0.8",
   "description": "Mentor's toolbelt",
   "type": "module",
-  "main": "index.mjs",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint --fix .",
     "prepare": "husky"
