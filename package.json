@@ -1,0 +1,29 @@
+{
+  "name": "mentie",
+  "version": "0.0.8",
+  "description": "Mentor's toolbelt",
+  "main": "index.cjs",
+  "scripts": {
+    "lint": "eslint --fix src",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/actuallymentor/mentie.git"
+  },
+  "author": "Mentor <mentor@palokaj.co> (http://github.com/actuallymentor)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/actuallymentor/mentie/issues"
+  },
+  "homepage": "https://github.com/actuallymentor/mentie#readme",
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.25.1",
+    "@babel/preset-react": "^7.24.7",
+    "airier": "^0.0.8",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-unused-imports": "^3.2.0",
+    "husky": "^9.1.3"
+  }
+}
