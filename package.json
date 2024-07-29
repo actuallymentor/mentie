@@ -2,9 +2,10 @@
   "name": "mentie",
   "version": "0.0.8",
   "description": "Mentor's toolbelt",
-  "main": "index.cjs",
+  "type": "module",
+  "main": "index.mjs",
   "scripts": {
-    "lint": "eslint --fix modules",
+    "lint": "eslint --fix .",
     "prepare": "husky"
   },
   "repository": {
