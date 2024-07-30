@@ -1,15 +1,3 @@
-
-/**
- * Requests the dependencies needed for promises.
- * The promise dependencies are not loaded by default to reduce recourse usage.
- * @param {Error} e - The error object.
- * @returns {Promise<void>} - A promise that resolves when the dependencies are loaded.
- */
-const request_deps = async e => {
-    const { log } = await import( './logging.js' )
-    log.error( `🚨 Make sure to install the Promise dependencies with: "npm i -S promise-retry promise-parallel-throttle": `, e )
-}
-
 /**
  * Creates a retryable function that wraps an async function and adds retry logic.
  * @param {Function} async_function - The async function to be made retryable. MUST be an UNCALLED function. See example.
@@ -27,7 +15,7 @@ const request_deps = async e => {
 export async function make_retryable( async_function, { retry_times=5, cooldown_in_s=10, cooldown_entropy=true, logger=null } ) {
 
     // Function dependencies
-    const Retrier = await import( 'promise-retry' ).catch( request_deps )
+    const Retrier = await import( 'promise-retry' )
     const { wait } = await import( './time.js' )
 
     // Set a default logger that does nothing if none was provided
@@ -84,7 +72,7 @@ export async function make_retryable( async_function, { retry_times=5, cooldown_
 export async function throttle_and_retry( async_function_array=[], { max_parallel=2, retry_times, cooldown_in_s, cooldown_entropy, logger, fail_fast=true } ) {
 
     // Function dependencies 
-    const Throttle = await import( 'promise-parallel-throttle' ).catch( request_deps )
+    const Throttle = await import( 'promise-parallel-throttle' )
 
     // Create array of retryable functions
     const retryable_async_functions = async_function_array.map( async_function => {
