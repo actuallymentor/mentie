@@ -49,7 +49,7 @@ export const node_loglevel = typeof process !== 'undefined' && process.env?.LOG_
  * The log level used in the environment.
  * @type {string}
  */
-export const loglevel = web_loglevel || node_loglevel || 'info'
+export const loglevel = web_loglevel || node_loglevel || dev ? 'info' : 'error'
 
 
 /**
