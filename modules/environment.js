@@ -11,7 +11,7 @@ export const is_web = typeof window !== 'undefined'
  * Checks if the code is running in a Node environment.
  * @returns {boolean} Returns true if the code is running in a Node environment, otherwise returns false.
  */
-export const is_node = typeof process !== 'undefined' && process.versions && process.versions.node
+export const is_node = typeof process !== 'undefined' && process.versions && process.versions?.node
 
 /**
  * Checks if the code is running in a Firebase functions emulator environment.
@@ -42,7 +42,7 @@ export const web_loglevel = is_web && new URLSearchParams( location?.search ).ge
  * The log level for the Node environment.
  * @type {string} - Log level. Valid values are: 'info', 'warn', 'error'
  */
-export const node_loglevel = process.env?.LOG_LEVEL
+export const node_loglevel = typeof process !== 'undefined' && process.env?.LOG_LEVEL
 
 
 /**
@@ -50,3 +50,35 @@ export const node_loglevel = process.env?.LOG_LEVEL
  * @type {string}
  */
 export const loglevel = web_loglevel || node_loglevel || 'info'
+
+
+/**
+ * Logs the environment details.
+ * @param {Function} logger - Optional logger function to use for logging the environment details.
+ */
+export const log_environment = logger => {
+
+    // Environment trail
+    const env = {
+        web: {
+            is_web,
+            loglevel: web_loglevel,
+            window: typeof window !== 'undefined' && window,
+            search: typeof location !== 'undefined' && location.search
+        },
+        node: {
+            is_node,
+            loglevel: node_loglevel,
+            process: typeof process !== 'undefined' && process
+        },
+        environment: {
+            dev,
+            is_emulator
+        }
+    }
+
+    // Log the environment
+    if( !logger ) logger = console.log
+    logger( 'Environment:', env )
+
+}
