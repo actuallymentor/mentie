@@ -13,6 +13,32 @@ const should_log = levels => {
 
 }
 
+const add_trace = messages => {
+
+    // Do nothing if we are not in a browser
+    if( typeof window === 'undefined' ) return null
+
+    // Try to add stack to messages
+    try {
+
+        // Get the stack trace
+        let { stack } = new Error()
+
+        // Remove the first line of the stack trace as it is always the error message
+        stack = stack.split( '\n' ).slice( 1 ).join( '\n' )
+
+        // Add the trace to the messages
+        messages.push( { stack } )
+
+    } catch ( error ) {
+
+        // This should never happen but we'll add it so we don't crash in unexpected situations
+        return messages
+
+    }
+
+}
+
 /**
  * Logs the provided messages to the console.
  * Only logs in development mode OR if ?loglevel= or LOG_LEVEL= is set to one of the following: 'error', 'warn', 'info'.
@@ -30,7 +56,15 @@ export function log( ...messages ) {
     const levels = [ 'info' ]
 
     // Log the messages if the loglevel matches
-    if( dev || should_log( levels ) ) console.log( ...messages )
+    if( dev || should_log( levels ) ) {
+
+        // Add the trace to the messages
+        add_trace( messages )
+
+        // Log the messages
+        console.log( ...messages )
+
+    }
 
 }
 
@@ -47,7 +81,15 @@ log.info = function( ...messages ) {
     const levels = [ 'info' ]
 
     // Log the messages if the loglevel matches
-    if( is_emulator || should_log( levels ) ) console.info( ...messages )
+    if( is_emulator || should_log( levels ) ) {
+
+        // Add the trace to the messages
+        add_trace( messages )
+
+        // Log the messages
+        console.info( ...messages )
+        
+    }
 
 }
 
@@ -64,7 +106,15 @@ log.warn = function( ...messages ) {
     const levels = [ 'warn', 'info' ]
 
     // Log the messages if the loglevel matches
-    if( dev || should_log( levels ) ) console.warn( ...messages )
+    if( dev || should_log( levels ) ) {
+
+        // Add the trace to the messages
+        add_trace( messages )
+
+        // Log the messages
+        console.warn( ...messages )
+        
+    }
 
 }
 
