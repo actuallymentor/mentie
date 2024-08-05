@@ -15,20 +15,26 @@ const should_log = levels => {
 
 const add_trace = messages => {
 
-    // Do nothing if we are not in a browser
-    if( typeof window === 'undefined' ) return null
-
-    // Try to add stack to messages
+    // Try to add stack to messages if needed
     try {
+
+        // Do nothing if we are not in a browser
+        if( typeof window === 'undefined' ) return messages
+
+        // If there is no trace=true in the url, do nothing
+        if( !window.location?.search?.includes?.( 'trace=true' ) ) return messages
+
 
         // Get the stack trace
         let { stack } = new Error()
 
-        // Remove the first line of the stack trace as it is always the error message
+        // Remove the first line of the stack trace
         stack = stack.split( '\n' ).slice( 1 ).join( '\n' )
 
         // Add the trace to the messages
         messages.push( { stack } )
+
+        return messages
 
     } catch ( error ) {
 
