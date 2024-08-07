@@ -1,5 +1,5 @@
 // Import environment data
-import { dev, is_emulator, loglevel } from "./environment.js"
+import { dev, is_cypress, is_emulator, loglevel } from "./environment.js"
 
 const should_log = levels => {
 
@@ -13,6 +13,13 @@ const should_log = levels => {
 
 }
 
+/**
+ * Adds a stack trace IN PLACE to the provided messages array if executed in a browser context
+ * and if the URL query string contains `trace=true`.
+ * 
+ * @param {Array} messages - The array of messages to potentially add a trace to.
+ * @returns {Array} - The modified array of messages, including a stack trace if conditions were met.
+ */
 const add_trace = messages => {
 
     // Try to add stack to messages if needed
@@ -31,7 +38,7 @@ const add_trace = messages => {
         // Remove the first line of the stack trace
         stack = stack.split( '\n' ).slice( 1 ).join( '\n' )
 
-        // Add the trace to the messages
+        // Annotate the provided messages
         messages.push( { stack } )
 
         return messages
@@ -42,6 +49,27 @@ const add_trace = messages => {
         return messages
 
     }
+
+}
+
+/**
+ * Modifies the input messages by potentially stringifying them if in a Cypress environment,
+ * and by appending a stack trace if the conditions specified in `add_trace` are met.
+ * 
+ * @param {Array} messages - The array of messages to be annotated.
+ * @returns {void} - This function modifies the input array directly and does not return a value.
+ */
+const annotate_messages = messages => {
+
+
+    // If we are running in cypress, stringify the messages because they become unavailable in the console
+    if( is_cypress ) messages = messages.map( message => JSON.stringify( message, null, 2 ) )
+
+    // Annotate the provided messages
+    messages = add_trace( messages )
+
+    // Return the annotated messages
+    return messages
 
 }
 
@@ -64,8 +92,8 @@ export function log( ...messages ) {
     // Log the messages if the loglevel matches
     if( dev || should_log( levels ) ) {
 
-        // Add the trace to the messages
-        add_trace( messages )
+        // Annotate the provided messages
+        annotate_messages( messages )
 
         // Log the messages
         console.log( ...messages )
@@ -89,8 +117,8 @@ log.info = function( ...messages ) {
     // Log the messages if the loglevel matches
     if( is_emulator || should_log( levels ) ) {
 
-        // Add the trace to the messages
-        add_trace( messages )
+        // Annotate the provided messages
+        annotate_messages( messages )
 
         // Log the messages
         console.info( ...messages )
@@ -114,8 +142,8 @@ log.warn = function( ...messages ) {
     // Log the messages if the loglevel matches
     if( dev || should_log( levels ) ) {
 
-        // Add the trace to the messages
-        add_trace( messages )
+        // Annotate the provided messages
+        annotate_messages( messages )
 
         // Log the messages
         console.warn( ...messages )

@@ -7,6 +7,13 @@
  * @returns {boolean} Returns true if the code is running in a web environment, otherwise returns false.
  */
 export const is_web = typeof window !== 'undefined'
+
+/**
+ * Checks if the code is running within a Cypress environment.
+ * @returns {boolean} Returns true if the code is running in a Cypress environment, otherwise returns false.
+ */
+export const is_cypress = typeof Cypress !== 'undefined'
+
 /**
  * Checks if the code is running in a Node environment.
  * @returns {boolean} Returns true if the code is running in a Node environment, otherwise returns false.
