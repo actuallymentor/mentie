@@ -12,7 +12,7 @@ export const is_web = typeof window !== 'undefined'
  * Checks if the code is running within a Cypress environment.
  * @returns {boolean} Returns true if the code is running in a Cypress environment, otherwise returns false.
  */
-export const is_cypress = typeof Cypress !== 'undefined'
+export const is_cypress = is_web && typeof window.Cypress !== 'undefined'
 
 /**
  * Checks if the code is running in a Node environment.
