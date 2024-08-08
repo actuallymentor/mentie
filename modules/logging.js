@@ -63,7 +63,14 @@ const annotate_messages = messages => {
 
 
     // If we are running in cypress, stringify the messages because they become unavailable in the console
-    if( is_cypress ) messages = messages.map( message => JSON.stringify( message, null, 2 ) )
+    if( is_cypress ) {
+
+        try {
+            messages = messages.map( message => JSON.stringify( message, null, 2 ) )
+        } catch  {
+            // This fails if the JSON was something curcular, se we'll leave things as they are
+        }
+    }
 
     // Annotate the provided messages
     messages = add_trace( messages )
