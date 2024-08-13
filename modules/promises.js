@@ -10,12 +10,12 @@
  * @example
  * make_retryable( do_thing )
  * make_retryable( () => fetch( 'https://api.com/data' ) )
- * @see {@link https://www.npmjs.com/package/promise-retry|promise-retry}
+ * @see {@link https://www.npmjs.com/package/promise-retry}
  */
 export async function make_retryable( async_function, { retry_times=5, cooldown_in_s=10, cooldown_entropy=true, logger=null } ) {
 
     // Function dependencies
-    const Retrier = await import( 'promise-retry' )
+    const { default: Retrier } = await import( 'promise-retry' )
     const { wait } = await import( './time.js' )
 
     // Set a default logger that does nothing if none was provided
@@ -67,12 +67,12 @@ export async function make_retryable( async_function, { retry_times=5, cooldown_
  * @param {Function} [options.logger] - Progress callback function.
  * @param {boolean} [options.fail_fast=true] - Whether to fail fast or continue with other functions when an error occurs.
  * @returns {Promise<Array>} - A promise that resolves to an array of results from the async functions.
- * @see {@link https://www.npmjs.com/package/promise-parallel-throttle|promise-parallel-throttle}
+ * @see {@link https://www.npmjs.com/package/promise-parallel-throttle}
  */
 export async function throttle_and_retry( async_function_array=[], { max_parallel=2, retry_times, cooldown_in_s, cooldown_entropy, logger, fail_fast=true } ) {
 
     // Function dependencies 
-    const Throttle = await import( 'promise-parallel-throttle' )
+    const { default: Throttle } = await import( 'promise-parallel-throttle' )
 
     // Create array of retryable functions
     const retryable_async_functions = async_function_array.map( async_function => {

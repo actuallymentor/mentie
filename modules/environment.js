@@ -81,7 +81,8 @@ export const log_environment = logger => {
         environment: {
             dev,
             is_emulator,
-            is_cypress
+            is_cypress,
+            loglevel
         }
     }
 
