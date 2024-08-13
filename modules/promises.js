@@ -12,14 +12,14 @@
  * make_retryable( () => fetch( 'https://api.com/data' ) )
  * @see {@link https://www.npmjs.com/package/promise-retry}
  */
-export async function make_retryable( async_function, { retry_times=5, cooldown_in_s=10, cooldown_entropy=true, logger=null } ) {
+export async function make_retryable( async_function, { retry_times = 5, cooldown_in_s = 10, cooldown_entropy = true, logger = null } ) {
 
     // Function dependencies
     const { default: Retrier } = await import( 'promise-retry' )
     const { wait } = await import( './time.js' )
 
     // Set a default logger that does nothing if none was provided
-    if( !logger ) logger = () => {}
+    if( !logger ) logger = () => { }
 
     // Formulate retry logic
     const retryable_function = () => Retrier( ( do_retry, retry_counter ) => {
@@ -34,7 +34,7 @@ export async function make_retryable( async_function, { retry_times=5, cooldown_
             }
 
             // If retries left, retry with a progressive delay
-            const entropy = !cooldown_entropy ? 0 :  .1 + Math.random() // Add some randomness to cooldown
+            const entropy = !cooldown_entropy ? 0 : .1 + Math.random() // Add some randomness to cooldown
             const cooldown_in_ms = ( cooldown_in_s + entropy ) * 1000 // Convert cooldown to milliseconds
             const cooldown = cooldown_in_ms + cooldown_in_ms * ( retry_counter - 1 ) // Increase cooldown with each retry
 
@@ -69,13 +69,22 @@ export async function make_retryable( async_function, { retry_times=5, cooldown_
  * @returns {Promise<Array>} - A promise that resolves to an array of results from the async functions.
  * @see {@link https://www.npmjs.com/package/promise-parallel-throttle}
  */
-export async function throttle_and_retry( async_function_array=[], { max_parallel=2, retry_times, cooldown_in_s, cooldown_entropy, logger, fail_fast=true } ) {
+export async function throttle_and_retry( async_function_array = [], { max_parallel = 2, retry_times, cooldown_in_s, cooldown_entropy, logger, fail_fast = true } ) {
 
     // Function dependencies 
     const { default: Throttle } = await import( 'promise-parallel-throttle' )
 
+    // Check that async_function_array is an array with functions in it
+    if( !Array.isArray( async_function_array ) || !async_function_array.every( f => typeof f === 'function' ) ) {
+        throw new Error( 'async_function_array must be an array of functions' )
+    }
+
+    // Set a default logger that does nothing if none was provided
+    if( !logger ) logger = () => { }
+
     // Create array of retryable functions
-    const retryable_async_functions = Promise.all( async_function_array.map( async async_function => {
+    logger( `Creating ${ async_function_array.length } retryable functions` )
+    const retryable_async_functions = await Promise.all( async_function_array.map( async async_function => {
         const retryable_function = await make_retryable( async_function, { retry_times, cooldown_in_s, logger, cooldown_entropy } )
         return retryable_function
     } ) )
@@ -88,6 +97,7 @@ export async function throttle_and_retry( async_function_array=[], { max_paralle
     }
 
     // Return throttler
+    logger( `Starting queue of ${ async_function_array.length } functions with options: `, throttle_config )
     return Throttle.all( retryable_async_functions, throttle_config )
 
 }
