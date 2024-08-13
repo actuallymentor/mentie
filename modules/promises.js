@@ -6,7 +6,7 @@
  * @param {number} [options.cooldown_in_s=10] - The cooldown time in seconds between retries.
  * @param {boolean} [options.cooldown_entropy=true] - Whether to add randomness to the cooldown time.
  * @param {Function} [options.logger=null] - The logger function to log retry attempts.
- * @returns {Function} - The retryable function.
+ * @returns {Promise<Function>} - The retryable function.
  * @example
  * make_retryable( do_thing )
  * make_retryable( () => fetch( 'https://api.com/data' ) )
@@ -75,10 +75,10 @@ export async function throttle_and_retry( async_function_array=[], { max_paralle
     const { default: Throttle } = await import( 'promise-parallel-throttle' )
 
     // Create array of retryable functions
-    const retryable_async_functions = async_function_array.map( async_function => {
-        const retryable_function = make_retryable( async_function, { retry_times, cooldown_in_s, logger, cooldown_entropy } )
+    const retryable_async_functions = Promise.all( async_function_array.map( async async_function => {
+        const retryable_function = await make_retryable( async_function, { retry_times, cooldown_in_s, logger, cooldown_entropy } )
         return retryable_function
-    } )
+    } ) )
 
     // Throttle configuration
     const throttle_config = {
