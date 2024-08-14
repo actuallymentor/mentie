@@ -1,7 +1,9 @@
 // Import environment data
-import { dev, is_cypress, is_emulator, loglevel } from "./environment.js"
+import { dev, env } from "./environment.js"
 
 const should_log = levels => {
+
+    const loglevel = env.loglevel()
 
     // Check if the loglevel matches this call
     const valid_levels = [ 'info', 'warn', 'error' ]
@@ -63,7 +65,7 @@ const annotate_messages = messages => {
 
 
     // If we are running in cypress, stringify the messages because they become unavailable in the console
-    if( is_cypress ) {
+    if( env.is_cypress() ) {
 
         try {
             messages = messages.map( message => JSON.stringify( message, null, 2 ) )
@@ -122,7 +124,7 @@ log.info = function( ...messages ) {
     const levels = [ 'info' ]
 
     // Log the messages if the loglevel matches
-    if( is_emulator || should_log( levels ) ) {
+    if( env.is_emulator() || should_log( levels ) ) {
 
         // Annotate the provided messages
         annotate_messages( messages )
@@ -170,7 +172,7 @@ log.error = function( ...messages ) {
 
     // Check if the loglevel matches this call
     const levels = [ 'error', 'warn', 'info' ]
-    const should_log = dev || levels.includes( loglevel )
+    const should_log = dev || levels.includes( env.loglevel() )
     if( !dev || !should_log ) return
 
     // Log the messages if the loglevel matches
@@ -180,4 +182,4 @@ log.error = function( ...messages ) {
 }
 
 // Set the loglevel on the log function
-log.loglevel = loglevel
+log.loglevel = env.loglevel()
