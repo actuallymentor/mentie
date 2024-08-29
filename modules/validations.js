@@ -31,8 +31,8 @@ export const require_props = ( obj={}, required_properties=[], error_on_fail=tru
     const missing_properties = required_properties.filter( prop => !keys.includes( prop ) )
 
     // If properties are missing, throw errors or return false
-    if( error_on_fail && !missing_properties.length ) throw new Error( `Missing required properties on object: ${ missing_properties.join( ', ' ) }` )
-    if( !missing_properties.length ) return false
+    if( error_on_fail && missing_properties.length ) throw new Error( `Missing required properties on object: ${ missing_properties.join( ', ' ) }` )
+    if( missing_properties.length ) return false
 
     // If all good, return true
     return true
