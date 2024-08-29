@@ -1,3 +1,5 @@
+import { log } from "./logging"
+
 /**
  * Cache object for storing data.
  * @type {Object}
@@ -15,6 +17,17 @@ const _cache = {}
  * @returns {*} The cached value.
  */
 export function cache( key, value ) {
+
+    // If the key is undefined, log a warning
+    if( key === undefined ) {
+        log.warn( `The cache key is undefined, this may indicate a bug in your cache logic` )
+    }
+
+    // Warn if the key contains 'undefined'
+    if( key.includes( 'undefined' ) ) {
+        log.warn( `The cache key ${ key } contains 'undefined', this may indicate a bug in your cache logic` )
+    }
+
     if( value ) _cache[key] = value
     return _cache[key]
 }

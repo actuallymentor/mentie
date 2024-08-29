@@ -12,3 +12,55 @@ export const email_regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/
  * @returns {string} - The sanitized string.
  */
 export const sanetise_string = string => `${ string }`.trim().toLowerCase()
+
+
+/**
+ * Checks if an object contains all the required properties.
+ * @param {Object} obj - The object to check.
+ * @param {Array} required_properties - The array of required properties.
+ * @param {boolean} [error_on_fail=true] - Determines whether to throw an error if properties are missing.
+ * @returns {boolean} - Returns true if all required properties are present, otherwise returns false.
+ * @throws {Error} - Throws an error if properties are missing and `error_on_fail` is true.
+ */
+export const require_props = ( obj={}, required_properties=[], error_on_fail=true ) => {
+
+    // Get the keys on the object
+    const keys = Object.keys( obj )
+
+    // Check that required props are present
+    const contains_all_required = required_properties.every( key => keys.includes( key ) )
+
+    // If properties are missing, throw errors or return false
+    if( error_on_fail && !contains_all_required ) throw new Error( `Missing required properties on object` )
+    if( !contains_all_required ) return false
+
+    // If all good, return true
+    return true
+
+}
+
+/**
+ * Validates the properties of an object against a list of allowed properties.
+ * 
+ * @param {Object} obj - The object to validate.
+ * @param {Array} allowed_properties - The list of allowed properties.
+ * @param {boolean} [error_on_fail=true] - Determines whether to throw an error if unknown properties are found.
+ * @returns {boolean} - Returns true if all properties are allowed, false otherwise.
+ * @throws {Error} - Throws an error if unknown properties are found and `error_on_fail` is true.
+ */
+export const allow_props = ( obj={}, allowed_properties=[], error_on_fail=true ) => {
+
+    // Get the keys on the object
+    const keys = Object.keys( obj )
+
+    // Check that required props are present
+    const unknownProperties = keys.filter( key => !allowed_properties.includes( key ) )
+
+    // If properties are missing, throw errors or return false
+    if( error_on_fail && unknownProperties.length ) throw new Error( `Unknown properties on object: ${ unknownProperties.join( ', ' ) }` )
+    if( unknownProperties.length ) return false
+
+    // If all good, return true
+    return true
+
+}
