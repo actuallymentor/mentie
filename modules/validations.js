@@ -28,11 +28,11 @@ export const require_props = ( obj={}, required_properties=[], error_on_fail=tru
     const keys = Object.keys( obj )
 
     // Check that required props are present
-    const contains_all_required = required_properties.every( key => keys.includes( key ) )
+    const missing_properties = required_properties.filter( prop => !keys.includes( prop ) )
 
     // If properties are missing, throw errors or return false
-    if( error_on_fail && !contains_all_required ) throw new Error( `Missing required properties on object: ${ required_properties.join( ', ' ) }` )
-    if( !contains_all_required ) return false
+    if( error_on_fail && !missing_properties.length ) throw new Error( `Missing required properties on object: ${ missing_properties.join( ', ' ) }` )
+    if( !missing_properties.length ) return false
 
     // If all good, return true
     return true
