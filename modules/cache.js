@@ -1,4 +1,4 @@
-import { log } from "./logging"
+import { log } from "./logging.js"
 
 /**
  * Cache object for storing data.

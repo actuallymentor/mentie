@@ -1,6 +1,6 @@
 {
   "name": "mentie",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "Mentor's toolbelt",
   "type": "module",
   "main": "index.js",
