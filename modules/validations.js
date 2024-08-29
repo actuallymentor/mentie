@@ -31,7 +31,7 @@ export const require_props = ( obj={}, required_properties=[], error_on_fail=tru
     const contains_all_required = required_properties.every( key => keys.includes( key ) )
 
     // If properties are missing, throw errors or return false
-    if( error_on_fail && !contains_all_required ) throw new Error( `Missing required properties on object` )
+    if( error_on_fail && !contains_all_required ) throw new Error( `Missing required properties on object: ${ required_properties.join( ', ' ) }` )
     if( !contains_all_required ) return false
 
     // If all good, return true
