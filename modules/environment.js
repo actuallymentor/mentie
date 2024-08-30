@@ -18,6 +18,12 @@ export const env = {}
 env.is_web = () => typeof window !== 'undefined'
 
 /**
+ * 
+ * @returns {boolean} True if running in a web browser and the URL includes 'localhost', otherwise false.
+ */
+env.is_localhost = () => env.is_web() && `${ location.href }`.includes( 'localhost' )
+
+/**
  * Checks if the code is running in the Cypress testing environment within a web browser.
  * @returns {boolean} True if running in Cypress, otherwise false.
  */
@@ -77,6 +83,12 @@ env.loglevel = () => env.web_loglevel() || env.node_loglevel() || env.dev() ? 'i
  * @returns {boolean} Returns true if the code is running in a web environment, otherwise returns false.
  */
 export const is_web = env.is_web()
+
+/**
+ * Checks if the code is running in a web environment and the URL includes 'localhost'.
+ * @returns {boolean} Returns true if the code is running in a web environment and the URL includes 'localhost', otherwise returns false.
+ */
+export const is_localhost = env.is_localhost()
 
 /**
  * Checks if the code is running within a Cypress environment.
