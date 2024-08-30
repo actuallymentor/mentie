@@ -1,6 +1,6 @@
 {
   "name": "mentie",
-  "version": "0.1.23",
+  "version": "0.2.23",
   "description": "Mentor's toolbelt",
   "type": "module",
   "main": "index.js",
@@ -29,7 +29,8 @@
   },
   "peerDependencies": {
     "promise-parallel-throttle": "^3.5.0",
-    "promise-retry": "^2.0.1"
+    "promise-retry": "^2.0.1",
+    "hash.js": "^1.1.7"
   },
   "dependencies": {
     "safe-stable-stringify": "^2.4.3"
