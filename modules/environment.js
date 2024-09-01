@@ -21,7 +21,7 @@ env.is_web = () => typeof window !== 'undefined'
  * 
  * @returns {boolean} True if running in a web browser and the URL includes 'localhost', otherwise false.
  */
-env.is_localhost = () => env.is_web() && `${ location.href }`.includes( 'localhost' )
+env.is_localhost = () => env.is_web() && [ 'localhost', '127.0.0.1', '::1' ].some( host => `${ location.href }`.includes( host ) )
 
 /**
  * Checks if the code is running in the Cypress testing environment within a web browser.
