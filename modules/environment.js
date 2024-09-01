@@ -108,6 +108,12 @@ export const is_node = env.is_node()
  */
 export const is_emulator = env.is_emulator()
 
+/**
+ * Checks if the code is running in a development environment.
+ * @returns {boolean} Returns true if the code is running in a development environment, otherwise returns false.
+ */
+export const is_github_actions =  process.env.GITHUB_ACTIONS == true
+
 // ///////////////////////////////
 // Mode and loglevel detection
 // ///////////////////////////////
