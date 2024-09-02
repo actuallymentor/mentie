@@ -155,7 +155,7 @@ log.warn = function( ...messages ) {
         annotate_messages( messages )
 
         // Log the messages
-        console.warn( ...messages )
+        console.warn( '⚠️ ', ...messages )
         
     }
 
@@ -176,7 +176,7 @@ log.error = function( ...messages ) {
     if( !dev || !should_log ) return
 
     // Log the messages if the loglevel matches
-    console.error( ...messages )
+    console.error( '🚨 ', ...messages )
     console.trace()
 
 }
