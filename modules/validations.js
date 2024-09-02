@@ -64,3 +64,39 @@ export const allow_props = ( obj={}, allowed_properties=[], error_on_fail=true )
     return true
 
 }
+
+
+/**
+ * Compares two objects and returns the differences between them.
+ * @param {Object} obj1 - The first object to compare.
+ * @param {Object} obj2 - The second object to compare.
+ * @param {boolean} [include_originals=false] - Determines whether to include the original objects in the return value.
+ * @returns {Object} - An object containing the changes between the two objects.
+ */
+export const shallow_compare_objects = ( obj1={}, obj2={}, include_originals=false ) => {
+
+    // Get all keys between the two objects
+    const keys = [ ...new Set( [ ...Object.keys( obj1 ), ...Object.keys( obj2 ) ] ) ]
+
+    // Generate a diff object that has changed keys that have a { from, to } structure where additions and removals are marked using undefined
+    const changes = keys.reduce( ( acc, key ) => {
+
+        // Check if the key is in both objects
+        if( JSON.stringify( obj1[ key ] ) === JSON.stringify( obj2[ key ] ) ) return acc
+
+        // Generate from/to object
+        const changes = { from: obj1[ key ], to: obj2[ key ] }
+
+        // Add the change to the accumulator
+        acc[ key ] = changes
+
+        // Return the accumulator
+        return acc
+
+    }, {} )
+
+    if( include_originals ) return { changes, obj1, obj2 }
+
+    return changes
+
+}
