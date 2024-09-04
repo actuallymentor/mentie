@@ -31,3 +31,32 @@ export function cache( key, value ) {
     if( value ) _cache[key] = value
     return _cache[key]
 }
+
+/**
+ * Function to inspect concurrency.
+ * 
+ * @param {Function} logger - The logger function.
+ * @returns {number} - The concurrency value.
+ */
+export function concurrency( logger ) {
+
+    // Get the concurrency key
+    let key = cache( `concurrency_key` )
+    if( !key ) {
+        cache( `concurrency_key`, Date.now() )
+        key = cache( `concurrency_key` )
+    }
+
+    // Get the latest concurrency value
+    const concurrency = cache( `concurrency` ) || 1
+
+    // Set the new concurrency value
+    cache( `concurrency`, concurrency + 1 )
+
+    // If there was no logger, return the concurrency value
+    if( !logger ) return concurrency
+
+    // Log the concurrency value
+    logger( `Concurrency key ${ key }: ${ concurrency }` )
+
+}
