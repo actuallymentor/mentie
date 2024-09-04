@@ -36,14 +36,15 @@ export function cache( key, value ) {
  * Function to inspect concurrency.
  * 
  * @param {Function} logger - The logger function.
+ * @param {string} key_prefix - The key for the concurrency value, used to tag the logging
  * @returns {number} - The concurrency value.
  */
-export function concurrency( logger ) {
+export function concurrency( logger, key_prefix ) {
 
     // Get the concurrency key
     let key = cache( `concurrency_key` )
     if( !key ) {
-        cache( `concurrency_key`, Date.now() )
+        cache( `concurrency_key`, `${ key_prefix }_${ Date.now() }` )
         key = cache( `concurrency_key` )
     }
 
