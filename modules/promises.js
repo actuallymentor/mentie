@@ -101,3 +101,28 @@ export async function throttle_and_retry( async_function_array = [], { max_paral
     return Throttle.all( retryable_async_functions, throttle_config )
 
 }
+
+/**
+ * A function that adds a timeout to a promise.
+ *
+ * @param {Promise} promise - The promise to add a timeout to.
+ * @param {number} [timeout_in_ms=60000] - The timeout duration in milliseconds. Default is 60000ms (1 minute).
+ * @param {boolean} [throw_on_timeout=true] - Whether to throw an error on timeout. Default is true.
+ * @returns {Promise} - A promise that resolves with the result of the original promise or a timeout message.
+ */
+export async function promise_timeout( promise, timeout_in_ms=60_000, throw_on_timeout=true ) {
+
+    // Timeout finction
+    const timeout = () => new Promise( ( res, rej ) => setTimeout( throw_on_timeout ? rej : () => res( 'timed out' ), timeout_in_ms ) )
+
+    // Race the promise against the timeout
+    return Promise.race( [
+
+        // If the promise resolves first, return the result (including throwsing on error)
+        promise,
+
+        // If this resolves first, this function throws or returns a timeout message
+        timeout()
+    ] )
+
+}
