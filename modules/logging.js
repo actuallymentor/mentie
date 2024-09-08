@@ -172,8 +172,7 @@ log.error = function( ...messages ) {
 
     // Check if the loglevel matches this call
     const levels = [ 'error', 'warn', 'info' ]
-    const should_log = dev || levels.includes( env.loglevel() )
-    if( !dev || !should_log ) return
+    if( dev || !should_log( levels ) ) return
 
     // Log the messages if the loglevel matches
     console.error( '🚨 ', ...messages )
