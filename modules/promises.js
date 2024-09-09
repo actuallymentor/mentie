@@ -69,7 +69,7 @@ export async function make_retryable( async_function, { retry_times = 5, cooldow
  * @returns {Promise<Array>} - A promise that resolves to an array of results from the async functions.
  * @see {@link https://www.npmjs.com/package/promise-parallel-throttle}
  */
-export async function throttle_and_retry( async_function_array = [], { max_parallel = 2, retry_times, cooldown_in_s, cooldown_entropy, logger, fail_fast = true } ) {
+export async function throttle_and_retry( async_function_array = [], { max_parallel = 2, retry_times=2, cooldown_in_s=5, cooldown_entropy=false, logger, fail_fast = true } ) {
 
     // Function dependencies 
     const { default: Throttle } = await import( 'promise-parallel-throttle' )
