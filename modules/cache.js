@@ -24,7 +24,7 @@ export function cache( key, value ) {
     }
 
     // Warn if the key contains 'undefined'
-    if( key.includes( 'undefined' ) ) {
+    if( key?.includes( 'undefined' ) ) {
         log.warn( `The cache key ${ key } contains 'undefined', this may indicate a bug in your cache logic` )
     }
 
