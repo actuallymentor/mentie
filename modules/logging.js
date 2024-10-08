@@ -1,3 +1,5 @@
+import stringify from "safe-stable-stringify"
+
 // Import environment data
 import { dev, env } from "./environment.js"
 
@@ -68,7 +70,7 @@ const annotate_messages = messages => {
     if( env.is_cypress() ) {
 
         try {
-            messages = messages.map( message => JSON.stringify( message, null, 2 ) )
+            messages = messages.map( message => stringify( message, null, 2 ) )
         } catch  {
             // This fails if the JSON was something curcular, se we'll leave things as they are
         }

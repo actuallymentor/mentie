@@ -1,3 +1,5 @@
+import stringify from "safe-stable-stringify"
+
 /**
  * Regular expression for validating email addresses.
  * @see {@link https://emailregex.com/}
@@ -82,7 +84,7 @@ export const shallow_compare_objects = ( obj1={}, obj2={}, include_originals=fal
     const changes = keys.reduce( ( acc, key ) => {
 
         // Check if the key is in both objects
-        if( JSON.stringify( obj1[ key ] ) === JSON.stringify( obj2[ key ] ) ) return acc
+        if( stringify( obj1[ key ] ) === stringify( obj2[ key ] ) ) return acc
 
         // Generate from/to object
         const changes = { from: obj1[ key ], to: obj2[ key ] }
