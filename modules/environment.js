@@ -77,6 +77,41 @@ env.node_loglevel = () => env.is_node() && process.env?.LOG_LEVEL
  */
 env.loglevel = () => env.web_loglevel() || env.node_loglevel() || env.dev() ? 'info' : 'error'
 
+/**
+ * Checks if the code is running in a web browser and the platform is Mac.
+ * @returns {boolean} True if the code is running in a web browser and the platform is Mac, otherwise false.
+ */
+env.is_mac = () => env.is_web() && navigator.userAgent?.toUpperCase().includes( 'MAC' )
+
+/**
+ * Checks if the code is running in a web browser and the platform is iPhone.
+ * @returns {boolean} True if the code is running in a web browser and the platform is iPhone, otherwise false.
+ */
+env.is_iphone = () => env.is_web() && navigator.userAgent?.toUpperCase().includes( 'IPHONE' )
+
+/**
+ * Checks if the code is running in a web browser and the platform is Android.
+ * @returns {boolean} True if the code is running in a web browser and the platform is Android, otherwise false.
+ */
+env.is_android = () => env.is_web() && navigator.userAgent?.toUpperCase().includes( 'ANDROID' )
+
+/**
+ * Checks if the code is running in a web browser and the platform is iOS.
+ * @returns {boolean} True if the code is running in a web browser and the platform is made by Apple
+ */
+env.is_apple = () => env.is_web() && navigator.userAgent?.toUpperCase().includes( 'MAC OS X' )
+
+/**
+ * Checks if the code is running in a web browser and the platform is Windows.
+ * @returns {boolean} True if the code is running in a web browser and the platform is Linux, otherwise false.
+ */
+env.is_linux = () => env.is_web() && navigator.userAgent?.toUpperCase().includes( 'LINUX' )
+
+/**
+ * Checks if the code is running in a web browser and the platform is Windows.
+ * @returns {boolean} True if the code is running in a web browser and the platform is Windows, otherwise false.
+ */
+env.is_windows = () => env.is_web() && navigator.userAgent?.toUpperCase().includes( 'WIN' )
 
 /**
  * Checks if the code is running in a web environment.
@@ -113,6 +148,36 @@ export const is_emulator = env.is_emulator()
  * @returns {boolean} Returns true if the code is running in a development environment, otherwise returns false.
  */
 export const is_github_actions = typeof process !== 'undefined' && process.env?.GITHUB_ACTIONS == true
+
+/**
+ * @returns {boolean} Returns true if the code is running on an Apple device, otherwise returns false.
+ */
+export const is_apple = env.is_apple()
+
+/**
+ * @returns {boolean} Returns true if the code is running on an iPhone, otherwise returns false.
+ */
+export const is_iphone = env.is_iphone()
+
+/**
+ * @returns {boolean} Returns true if the code is running on a Mac, otherwise returns false.
+ */
+export const is_mac = env.is_mac()
+
+/**
+ * @returns {boolean} Returns true if the code is running on an Android device, otherwise returns false.
+ */
+export const is_android = env.is_android()
+
+/**
+ * @returns {boolean} Returns true if the code is running on a Linux device, otherwise returns false.
+ */
+export const is_linux = env.is_linux()
+
+/**
+ * @returns {boolean} Returns true if the code is running on a Windows device, otherwise returns false.
+ */
+export const is_windows = env.is_windows()
 
 // ///////////////////////////////
 // Mode and loglevel detection
@@ -156,7 +221,15 @@ export const log_environment = logger => {
             is_web,
             loglevel: web_loglevel,
             window: typeof window !== 'undefined' && window,
-            search: typeof location !== 'undefined' && location.search
+            search: typeof location !== 'undefined' && location.search,
+            platform: {
+                is_android,
+                is_apple,
+                is_iphone,
+                is_linux,
+                is_mac,
+                is_windows
+            }
         },
         node: {
             is_node,
