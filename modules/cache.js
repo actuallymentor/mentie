@@ -13,7 +13,7 @@ const _cache = {}
  * If no value is provided, it retrieves the value from the cache.
  *
  * @param {string} key - The key to cache the value.
- * @param {*} [value] - The value to be cached (optional).
+ * @param {*} [value] - The value to be cached (optional). Use null to unset, undefined is never saved when provided as a parameter
  * @param {number} [expires_in_ms=Infinity] - The expiration time in milliseconds (optional).
  * @returns {*} The cached value.
  */
@@ -30,10 +30,13 @@ export function cache( key, value, expires_in_ms=Infinity ) {
     }
 
     // If value is provided, save value and expiration
-    if( value ) _cache[key] = { value, expires: Date.now() + expires_in_ms }
+    if( value !== undefined ) _cache[key] = { value, expires: Date.now() + expires_in_ms }
 
     // If cache has value, but it expired, remove it
-    if( _cache[key] && _cache[key].expires < Date.now() ) delete _cache[key]
+    if( _cache[key] && _cache[key].expires < Date.now() ) {
+        log.info( `Cache key ${ key } expired, removing from cache` )
+        delete _cache[key]
+    }
     
     // Return the value of the cache key, which may be undefined
     return _cache[key]?.value
