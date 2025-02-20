@@ -14,9 +14,10 @@ const _cache = {}
  *
  * @param {string} key - The key to cache the value.
  * @param {*} [value] - The value to be cached (optional).
+ * @param {number} [expires_in_ms=Infinity] - The expiration time in milliseconds (optional).
  * @returns {*} The cached value.
  */
-export function cache( key, value ) {
+export function cache( key, value, expires_in_ms=Infinity ) {
 
     // If the key is undefined, log a warning
     if( key === undefined ) {
@@ -28,8 +29,14 @@ export function cache( key, value ) {
         log.warn( `The cache key ${ key } contains 'undefined', this may indicate a bug in your cache logic` )
     }
 
-    if( value ) _cache[key] = value
-    return _cache[key]
+    // If value is provided, save value and expiration
+    if( value ) _cache[key] = { value, expires: Date.now() + expires_in_ms }
+
+    // If cache has value, but it expired, remove it
+    if( _cache[key] && _cache[key].expires < Date.now() ) delete _cache[key]
+    
+    // Return the value of the cache key, which may be undefined
+    return _cache[key]?.value
 }
 
 /**
