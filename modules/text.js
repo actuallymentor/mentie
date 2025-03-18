@@ -1,4 +1,4 @@
-import { random_number_between } from "./numbers"
+import { random_number_between } from "./numbers.js"
 
 /**
  * Truncates a given text to a specified length and appends a suffix if necessary.
