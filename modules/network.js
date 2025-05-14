@@ -10,7 +10,7 @@
  * @returns {Function} signal_data.abort - Alias for abort_signal
  * @returns {number} signal_data.timeout_id - Timeout ID
  */
-export const timeout_signal = ( { timeout_ms }={} ) => {
+export const abort_controller = ( { timeout_ms }={} ) => {
 
     // Request with timeout
     const controller = new AbortController()
