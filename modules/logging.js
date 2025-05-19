@@ -32,9 +32,8 @@ const add_trace = messages => {
         // Do nothing if we are not in a browser
         if( typeof window === 'undefined' ) return messages
 
-        // If there is no trace=true in the url, do nothing
-        if( !window.location?.search?.includes?.( 'trace=true' ) ) return messages
-
+        // If there is no trace=true in the url, return
+        if( !new URLSearchParams( location?.search ).get( 'trace' ) ) return messages
 
         // Get the stack trace
         let { stack } = new Error()
@@ -65,9 +64,14 @@ const add_trace = messages => {
  */
 const annotate_messages = messages => {
 
+    // Add annotations if requested
+    const annotations = env.log_annotations()
+    if( annotations.includes( 'timestamp' ) ) messages = [ Date.now(), ...messages ]
+    if( annotations.includes( 'isotime' ) ) messages = [ new Date().toISOString(), ...messages ]
+
 
     // If we are running in cypress, stringify the messages because they become unavailable in the console
-    if( env.is_cypress() ) {
+    if( env.is_cypress() || annotations.includes( 'stringify' ) ) {
 
         try {
             messages = messages.map( message => stringify( message, null, 2 ) )
@@ -75,6 +79,7 @@ const annotate_messages = messages => {
             // This fails if the JSON was something curcular, se we'll leave things as they are
         }
     }
+
 
     // Annotate the provided messages
     messages = add_trace( messages )
