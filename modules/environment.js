@@ -81,13 +81,13 @@ env.loglevel = () => env.web_loglevel() || env.node_loglevel() || env.dev() ? 'i
  * Retrieves the log annotations set via URL parameters in a web environment.
  * @returns {Array<string>|boolean} An array of log annotations from URL parameters, or false if not set.
  */
-env.web_log_annotations = () => env.is_web() && new URLSearchParams( location?.search ).get( 'log_annotations' ).split( ',' ).filter( Boolean ).map( annotation => annotation.trim() )
+env.web_log_annotations = () => env.is_web() && new URLSearchParams( location?.search ).get( 'log_annotations' )?.split( ',' )?.filter( Boolean )?.map( annotation => annotation?.trim() )
 
 /**
  * Retrieves the log annotations set via environment variables in a Node.js environment.
  * @returns {Array<string>|boolean} An array of log annotations from environment variables, or false if not set.
  */
-env.node_log_annotations = () => env.is_node() && process.env?.LOG_ANNOTATIONS?.split( ',' ).filter( Boolean ).map( annotation => annotation.trim() )
+env.node_log_annotations = () => env.is_node() && process.env?.LOG_ANNOTATIONS?.split( ',' )?.filter( Boolean )?.map( annotation => annotation?.trim() )
 
 /**
  * Retrieves the effective log annotations based on the environment. Defaults to an empty array if not set.
