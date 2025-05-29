@@ -69,7 +69,7 @@ env.web_loglevel = () => env.is_web() && new URLSearchParams( location?.search )
  * Retrieves the log level set via environment variables in a Node.js environment.
  * @returns {string|undefined} The log level from environment variables, or undefined if not set.
  */
-env.node_loglevel = () => env.is_node() && process.env?.LOG_LEVEL
+env.node_loglevel = () => env.is_node() && process.env?.LOGLEVEL
 
 /**
  * Retrieves the effective log level based on the environment. Defaults to 'info' in development environments, 'error' otherwise.
