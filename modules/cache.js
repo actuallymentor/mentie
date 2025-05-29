@@ -64,7 +64,7 @@ cache.dump = () => {
 cache.stats = () => {
 
     // Get the number of keys in the cache
-    const keys = Object.keys( _cache ).length
+    const keys = Object.keys( _cache )
 
     // Get the size in bytes of the cache
     const size_bytes = keys.reduce( ( acc, key ) => acc + JSON.stringify( _cache[key] ).length, 0 )
@@ -75,7 +75,7 @@ cache.stats = () => {
 
     // Return the stats
     return {
-        keys,
+        keys: keys.length,
         size_bytes,
         size_mib,
         size_gib
