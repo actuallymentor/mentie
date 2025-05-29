@@ -43,6 +43,47 @@ export function cache( key, value, expires_in_ms=Infinity ) {
 }
 
 /**
+ * 
+ * @returns {Object} - A copy of the cache object.
+ */
+cache.dump = () => {
+
+    // Return a copy of the cache object
+    return { ..._cache }
+
+}
+
+/**
+ * 
+ * @returns {Object} stats - An object containing statistics about the cache.
+ * @returns {number} stats.keys - The number of keys in the cache.
+ * @returns {number} stats.size_bytes - The size of the cache in bytes.
+ * @returns {string} stats.size_mib - The size of the cache in MiB, rounded to 2 decimal places.
+ * @returns {string} stats.size_gib - The size of the cache in GiB, rounded to 2 decimal places.
+ */
+cache.stats = () => {
+
+    // Get the number of keys in the cache
+    const keys = Object.keys( _cache ).length
+
+    // Get the size in bytes of the cache
+    const size_bytes = keys.reduce( ( acc, key ) => acc + JSON.stringify( _cache[key] ).length, 0 )
+
+    // Calculate side to MiB and GiB, both rounded to 2 decimal places
+    const size_mib = ( size_bytes / ( 1024 * 1024 ) ).toFixed( 2 )
+    const size_gib = ( size_bytes / ( 1024 * 1024 * 1024 ) ).toFixed( 2 )
+
+    // Return the stats
+    return {
+        keys,
+        size_bytes,
+        size_mib,
+        size_gib
+    }
+
+}
+
+/**
  * Function to inspect concurrency.
  * 
  * @param {Function} logger - The logger function.
