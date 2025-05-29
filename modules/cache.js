@@ -67,7 +67,7 @@ cache.stats = () => {
     const keys = Object.keys( _cache )
 
     // Get the size in bytes of the cache
-    const size_bytes = keys.reduce( ( acc, key ) => acc + JSON.stringify( _cache[key] ).length, 0 )
+    const size_bytes = keys.reduce( ( acc, key ) => acc + JSON.stringify( _cache[key] ).length + JSON.stringify( key ).length, 0 )
 
     // Calculate side to MiB and GiB, both rounded to 2 decimal places
     const size_mib = ( size_bytes / ( 1024 * 1024 ) ).toFixed( 2 )
