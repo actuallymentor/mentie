@@ -25,8 +25,8 @@ export function cache( key, value, expires_in_ms=Infinity ) {
     }
 
     // Warn if the key contains 'undefined'
-    if( `${ key }`.includes( 'undefined' ) ) {
-        log.warn( `The cache key ${ key } contains 'undefined', this may indicate a bug in your cache logic` )
+    if( `${ key }`.includes( 'undefined' ) || `${ key }`.includes( 'null' ) ) {
+        log.warn( `The cache key is ${ key }, this may indicate a bug in your cache logic` )
     }
 
     // If value is provided, save value and expiration
@@ -40,6 +40,49 @@ export function cache( key, value, expires_in_ms=Infinity ) {
     
     // Return the value of the cache key, which may be undefined
     return _cache[key]?.value
+}
+
+/**
+ * Restores the cache from a given cache object.
+ * If the cache object is empty, it will overwrite the current cache.
+ * If the cache object has keys that already exist in the current cache, those keys will be skipped.
+ * @param {Object} cache_object - The cache object to restore.
+ * @returns {Object} The updated cache object.
+ * @throws {Error} If the cache_object is not an object or is null.
+ */
+cache.restore = ( cache_object ) => {
+
+    // Impute type of cache_object
+    let input_type = typeof cache_object
+    if( cache_object === null ) input_type = 'null'
+    if( Array.isArray( cache_object ) ) input_type = 'array'
+
+    // Check if the cache_object is an object, specifically check it is not an array
+    if( input_type != 'object' ) {
+        throw new Error( `cache.restore() expects an object, got ${ input_type }` )
+    }
+
+    // If current cache has no keys, restore the cache object
+    if( !Object.keys( _cache ).length ) {
+        // Assign the cache_object content to the cache obect
+        Object.assign( _cache, cache_object )
+        log.info( `Cache restored with ${ Object.keys( cache_object ).length } keys` )
+        return _cache
+    }
+
+    // If current cache has keys, only overwrite keys that are not already in cache, warn for keys that are skipped
+    const keys = Object.keys( cache_object )
+    for( const key of keys ) {
+        if( _cache[key] ) {
+            log.warn( `Cache key ${ key } already exists, skipping restore` )
+        } else {
+            _cache[key] = cache_object[ key ]
+        }
+    }
+
+    log.info( `Cache restored with ${ keys.length } keys, ${ Object.keys( _cache ).length } total keys in cache` )
+    return _cache
+
 }
 
 /**
@@ -84,11 +127,17 @@ cache.stats = () => {
 }
 
 /**
- * Function to inspect concurrency.
+ * Function to inspect concurrency calls of a function. Add this as a logger in a function to log out the concurrency value.
  * 
  * @param {Function} logger - The logger function.
  * @param {string} key_prefix - The key for the concurrency value, used to tag the logging
  * @returns {number} - The concurrency value.
+ * @example
+ * import { cache, concurrency } from 'mentie';
+ * function often_called_function() {
+ *    concurrency( console.log, 'important_function' );
+ *   // ... function logic ...
+ * }
  */
 export function concurrency( logger, key_prefix ) {
 
