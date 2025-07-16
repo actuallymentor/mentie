@@ -22,12 +22,11 @@ export const truncate = ( text, length=100, suffix='...' ) => {
  * @param {function} [options.alerter] - The custom function to display the success message.
  * @returns {Promise<void>} - A promise that resolves when the text is successfully copied to the clipboard.
  */
-export const copy_to_clipboard = async ( text, { success_message='Copied to clipboard', alerter } ) => {
-    if( !navigator?.clipboard?.writeText ) return alert( 'Your browser does not support copying to clipboard' )
+export const copy_to_clipboard = async ( text, { success_message='Copied to clipboard', alerter=alert } ) => {
+    if( !navigator?.clipboard?.writeText ) return alerter( 'Your browser does not support copying to clipboard' )
     await navigator.clipboard.writeText( text )
 
-    if( alerter ) alerter( success_message )
-    else alert( success_message )
+    alerter( success_message )
 }
 
 /**
@@ -58,12 +57,12 @@ export const random_letter = ( allowed_chars, capitals=true ) => {
 
 }
 
-export const random_string_of_length = ( length, allowed_chars, numbers=true ) => {
+export const random_string_of_length = ( length, allowed_chars, numbers=true, capitals=true ) => {
 
     return Array.from( { length }, () => {
         // If numbers are allowed, add a 50% chance of generating a number
         if( numbers && Math.random() > 0.5 ) return `${ random_number_between( 9, 0 ) }`
-        return random_letter( allowed_chars )
+        return random_letter( allowed_chars, capitals )
     } ).join( '' )
 
 }

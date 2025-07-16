@@ -165,7 +165,7 @@ export const is_emulator = env.is_emulator()
  * Checks if the code is running in a development environment.
  * @returns {boolean} Returns true if the code is running in a development environment, otherwise returns false.
  */
-export const is_github_actions = typeof process !== 'undefined' && process.env?.GITHUB_ACTIONS == true
+export const is_github_actions = typeof process !== 'undefined' && process.env?.GITHUB_ACTIONS === 'true'
 
 /**
  * @returns {boolean} Returns true if the code is running on an Apple device, otherwise returns false.

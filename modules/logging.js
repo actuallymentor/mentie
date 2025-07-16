@@ -109,7 +109,7 @@ export function log( ...messages ) {
     if( dev || should_log( levels ) ) {
 
         // Annotate the provided messages
-        annotate_messages( messages )
+        messages = annotate_messages( messages )
 
         // Log the messages
         console.log( ...messages )
@@ -134,7 +134,7 @@ log.info = function( ...messages ) {
     if( env.is_emulator() || should_log( levels ) ) {
 
         // Annotate the provided messages
-        annotate_messages( messages )
+        messages = annotate_messages( messages )
 
         // Log the messages
         console.info( ...messages )
@@ -159,7 +159,7 @@ log.warn = function( ...messages ) {
     if( dev || should_log( levels ) ) {
 
         // Annotate the provided messages
-        annotate_messages( messages )
+        messages = annotate_messages( messages )
 
         // Log the messages
         console.warn( '⚠️ ', ...messages )
@@ -180,6 +180,9 @@ log.error = function( ...messages ) {
     // Check if the loglevel matches this call
     const levels = [ 'error', 'warn', 'info' ]
     if( !should_log( levels ) ) return
+
+    // Annotate the provided messages
+    messages = annotate_messages( messages )
 
     // Log the messages if the loglevel matches
     console.error( '🚨 ', ...messages )

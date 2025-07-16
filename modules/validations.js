@@ -15,6 +15,51 @@ export const email_regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/
  */
 export const sanetise_string = string => `${ string }`.trim().toLowerCase()
 
+/**
+ * Validates whether a given string is a valid IPv4 address.
+ * @param {string} ip - The IP address string to validate.
+ * @returns {boolean} True if the IP address is valid, otherwise false.
+ */
+export const is_ipv4 = ip => {
+
+    // Split the IP address into its components and make then numbers
+    const octets = ip.split( '.' ).map( octet => parseInt( octet, 10 ) )
+
+    // Check if the IP address has 4 octets and each octet is between 0 and 255
+    return octets.length === 4 && octets.every( octet => !isNaN( octet ) && octet >= 0 && octet <= 255 )
+
+}
+
+/**
+ * Sanitizes and optionally validates an IPv4 address.
+ * @param {Object} options - The options object.
+ * @param {string} options.ip - The IP address to sanitize.
+ * @param {boolean} [options.validate=false] - Whether to validate the IP address.
+ * @param {boolean} [options.error_on_invalid=false] - Whether to throw an error on an invalid IP.
+ * @returns {string|null} The sanitized IPv4 address, or null if validation fails and error_on_invalid is false.
+ * @throws {Error} If the IP address is not provided or invalid when error_on_invalid is true.
+ */
+export const sanetise_ipv4 = ( { ip, validate=false, error_on_invalid=false } ) => {
+
+    // Ensure ip was provided
+    if( !ip ) throw new Error( 'IP address is required' )
+
+    // Sanetise ip address as string
+    ip = sanetise_string( ip )
+
+    // Remove ipv6 prefix if present
+    ip = ip.replace( '::ffff:', '' )
+
+    // Check if the IP address is valid
+    if( validate && !is_ipv4( ip ) ) {
+        if( error_on_invalid ) throw new Error( `Invalid IPv4 address: ${ ip }` )
+        return null
+    }
+
+    // Return the sanitized IP address
+    return ip
+
+}
 
 /**
  * Checks if an object contains all the required properties.

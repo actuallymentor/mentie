@@ -3,7 +3,7 @@
  * 
  * @param {string} data - The data to be hashed.
  * @param {string} [algo='sha256'] - The algorithm to be used for hashing. Defaults to 'sha256'.
- * @param {string} [_digest='hex'] - The encoding of the output hash. Defaults to '
+ * @param {string} [_digest='hex'] - The encoding of the output hash. Defaults to 'hex'.
  * @returns {Promise<string>} The hashed value of the data.
  */
 export async function hash( data, algo='sha256', _digest='hex' ) {
