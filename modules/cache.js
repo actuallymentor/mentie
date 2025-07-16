@@ -29,6 +29,11 @@ export function cache( key, value, expires_in_ms=Infinity ) {
         log.warn( `The cache key is ${ key }, this may indicate a bug in your cache logic` )
     }
 
+    if( typeof expires_in_ms !== 'number' ) {
+        log.warn( `cache() expires_in_ms must be a number, got ${ typeof expires_in_ms }` )
+        expires_in_ms = Infinity
+    }
+
     // If value is provided, save value and expiration
     if( value !== undefined ) _cache[key] = { value, expires: Date.now() + expires_in_ms }
 

@@ -6,32 +6,37 @@
  * @returns {Object} signal_data - Object containing fetch options and abort signal
  * @returns {Object} signal_data.fetch_options - Options for usage with fetch requests
  * @returns {AbortController} signal_data.controller - Raw abort controller
- * @returns {Function} signal_data.abort_signal - Function to abort the request
- * @returns {Function} signal_data.abort - Alias for abort_signal
- * @returns {number} signal_data.timeout_id - Timeout ID
+ * @returns {number|null} signal_data.timeout_id - Timeout ID, or null if no timeout was set
+ * @example
+ * const { fetch_options, controller } = abort_controller( { timeout_ms: 5000 } )
+ * fetch( 'https://api.example.com/data', fetch_options )
+ * controller.abort() // Abort the request
  */
 export const abort_controller = ( { timeout_ms }={} ) => {
 
+    // Input validation
+    if( timeout_ms !== undefined && ( typeof timeout_ms !== 'number' || timeout_ms < 0 ) ) {
+        throw new Error( 'timeout_ms must be a non-negative number' )
+    }
+
     // Request with timeout
     const controller = new AbortController()
-    const timeout_id = timeout_ms && setTimeout( () => {
+    const timeout_id = timeout_ms !== undefined ? setTimeout( () => {
         controller.abort()
-    }, timeout_ms )
+    }, timeout_ms ) : null
+
+    // Clear timeout when controller is aborted
+    controller.signal.addEventListener( 'abort', () => {
+        if( timeout_id !== null ) clearTimeout( timeout_id )
+    } )
 
     const fetch_options = {
         signal: controller.signal
     }
 
-    const abort = () => {
-        if( timeout_ms ) clearTimeout( timeout_id )
-        controller.abort()
-    }
-
     return {
         fetch_options,
         controller,
-        abort_signal: abort,
-        abort,
         timeout_id
     }
 

@@ -117,10 +117,14 @@ env.is_android = () => env.is_web() && navigator.userAgent?.toUpperCase().includ
  * Checks if the code is running in a web browser and the platform is iOS.
  * @returns {boolean} True if the code is running in a web browser and the platform is made by Apple
  */
-env.is_apple = () => env.is_web() && navigator.userAgent?.toUpperCase().includes( 'MAC OS X' )
+env.is_apple = () => {
+    if( !env.is_web() ) return false
+    const userAgent = navigator.userAgent?.toUpperCase()
+    return userAgent?.includes( 'MAC OS X' ) || userAgent?.includes( 'IPHONE' ) || userAgent?.includes( 'IPAD' )
+}
 
 /**
- * Checks if the code is running in a web browser and the platform is Windows.
+ * Checks if the code is running in a web browser and the platform is Linux.
  * @returns {boolean} True if the code is running in a web browser and the platform is Linux, otherwise false.
  */
 env.is_linux = () => env.is_web() && navigator.userAgent?.toUpperCase().includes( 'LINUX' )

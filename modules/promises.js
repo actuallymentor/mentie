@@ -60,7 +60,7 @@ export async function make_retryable( async_function, { retry_times = 5, cooldow
  *
  * @param {Array<Function>} async_function_array - Array of async functions to be throttled and retried.
  * @param {Object} options - Options for throttling and retrying.
- * @param {number} [options.max_parallell=2] - Maximum number of functions to run in parallel.
+ * @param {number} [options.max_parallel=2] - Maximum number of functions to run in parallel.
  * @param {number} [options.retry_times] - Number of times to retry each function.
  * @param {number} [options.cooldown_in_s] - Cooldown time in seconds between retries.
  * @param {number} [options.cooldown_entropy] - Random factor to add to the cooldown time.
@@ -112,17 +112,26 @@ export async function throttle_and_retry( async_function_array = [], { max_paral
  */
 export async function promise_timeout( promise, timeout_in_ms=60_000, throw_on_timeout=true ) {
 
-    // Timeout finction
-    const timeout = () => new Promise( ( res, rej ) => setTimeout( throw_on_timeout ? rej : () => res( 'timed out' ), timeout_in_ms ) )
+    // Timeout id placeholder
+    let timeout_id
+
+    // Timeout function that stores the timeout ID so we can clear it
+    const timeout = () => new Promise( ( res, rej ) => {
+        timeout_id = setTimeout( throw_on_timeout ? rej : () => res( 'timed out' ), timeout_in_ms )
+    } )
 
     // Race the promise against the timeout
-    return Promise.race( [
+    try {
+        const result = await Promise.race( [
+            promise,
+            timeout()
+        ] )
 
-        // If the promise resolves first, return the result (including throwsing on error)
-        promise,
+        return result
 
-        // If this resolves first, this function throws or returns a timeout message
-        timeout()
-    ] )
+    } finally {
+        // Clear the timeout
+        clearTimeout( timeout_id )
+    }
 
 }
