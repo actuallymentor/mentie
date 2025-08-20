@@ -31,6 +31,25 @@ export const is_ipv4 = ip => {
 }
 
 /**
+ * Checks if a string is a valid IPv6 address. VERY NAIVELY
+ * @param {string} ip - The IP address to check.
+ * @returns {boolean} True if this is probably a valid IPv6 address, otherwise false.
+ */
+export const is_ipv6 = ip => {
+
+    // must be string
+    if( typeof ip !== 'string' ) return false
+
+    // must have only hex digits and colons
+    if( !/^[0-9a-f:]+$/.test( ip ) ) return false
+
+    // If no :: compression it must be 8 parts, otherwise it must be 7 or under
+    if( ip.includes( '::' ) ) return ip.split( ':' ).length <= 8
+    return ip.split( ':' ).length === 8
+
+}
+
+/**
  * Sanitizes and optionally validates an IPv4 address.
  * @param {Object} options - The options object.
  * @param {string} options.ip - The IP address to sanitize.
