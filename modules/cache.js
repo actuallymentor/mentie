@@ -5,7 +5,7 @@ import { log } from "./logging.js"
  * @type {Object}
  * @private
  */
-const _cache = {}
+let _cache = {}
 
 /**
  * Caches the value with the specified key.
@@ -99,6 +99,17 @@ cache.dump = () => {
     // Return a copy of the cache object
     return { ..._cache }
 
+}
+
+/**
+ * Clears the cache entirely
+ */
+cache.clear = ( { i_am_sure=false } ) => {
+    if( i_am_sure ) {
+        _cache = {}
+    } else {
+        log.warn( `cache.clear() called without i_am_sure=true, cache not cleared` )
+    }
 }
 
 /**
