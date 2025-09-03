@@ -23,7 +23,7 @@ export const sanetise_string = string => `${ string }`.trim().toLowerCase()
 export const is_ipv4 = ip => {
 
     // Split the IP address into its components and make then numbers
-    const octets = ip.split( '.' ).map( octet => parseInt( octet, 10 ) )
+    const octets = `${ ip }`.split( '.' ).map( octet => parseInt( octet, 10 ) )
 
     // Check if the IP address has 4 octets and each octet is between 0 and 255
     return octets.length === 4 && octets.every( octet => !isNaN( octet ) && octet >= 0 && octet <= 255 )
