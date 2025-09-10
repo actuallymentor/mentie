@@ -8,12 +8,25 @@ import stringify from "safe-stable-stringify"
 export const email_regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i
 
 /**
+ * Trims whitespace from each line of a multiline string.
+ * @param {string} string - The multiline string to trim.
+ * @returns {string} - The trimmed multiline string.
+ */
+export const multiline_trim = string => `${ string }`.split( '\n' ).map( s => s?.trim() ).join( '\n' ).trim()
+
+/**
  * Sanitizes a string by removing leading and trailing whitespace and converting it to lowercase.
  *
  * @param {string} string - The string to be sanitized.
+ * @param {boolean} [multiline=true] - Whether to trim each line of a multiline string.
  * @returns {string} - The sanitized string.
  */
-export const sanetise_string = string => `${ string }`.trim().toLowerCase()
+export const sanetise_string = ( string, multiline=true ) => {
+    string = `${ string }`.toLowerCase()
+    if( multiline ) string = multiline_trim( string )
+    else string = string.trim()
+    return string
+}
 
 /**
  * Validates whether a given string is a valid IPv4 address.
