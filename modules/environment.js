@@ -63,7 +63,7 @@ env.dev = () => env.node_dev() || env.web_dev()
  * Retrieves the log level set via URL parameters in a web environment.
  * @returns {string|null} The log level from URL parameters, or null if not set.
  */
-env.web_loglevel = () => env.is_web() && new URLSearchParams( location?.search ).get( 'loglevel' )
+env.web_loglevel = () => env.is_web() && new URLSearchParams( location?.search ).get( 'loglevel' ) || new URLSearchParams( location?.search ).get( 'log_level' )
 
 /**
  * Retrieves the log level set via environment variables in a Node.js environment.

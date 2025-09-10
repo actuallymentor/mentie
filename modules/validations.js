@@ -7,26 +7,6 @@ import stringify from "safe-stable-stringify"
  */
 export const email_regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i
 
-/**
- * Trims whitespace from each line of a multiline string.
- * @param {string} string - The multiline string to trim.
- * @returns {string} - The trimmed multiline string.
- */
-export const multiline_trim = string => `${ string }`.split( '\n' ).map( s => s?.trim() ).join( '\n' ).trim()
-
-/**
- * Sanitizes a string by removing leading and trailing whitespace and converting it to lowercase.
- *
- * @param {string} string - The string to be sanitized.
- * @param {boolean} [multiline=true] - Whether to trim each line of a multiline string.
- * @returns {string} - The sanitized string.
- */
-export const sanetise_string = ( string, multiline=true ) => {
-    string = `${ string }`.toLowerCase()
-    if( multiline ) string = multiline_trim( string )
-    else string = string.trim()
-    return string
-}
 
 /**
  * Validates whether a given string is a valid IPv4 address.
@@ -62,36 +42,6 @@ export const is_ipv6 = ip => {
 
 }
 
-/**
- * Sanitizes and optionally validates an IPv4 address.
- * @param {Object} options - The options object.
- * @param {string} options.ip - The IP address to sanitize.
- * @param {boolean} [options.validate=false] - Whether to validate the IP address.
- * @param {boolean} [options.error_on_invalid=false] - Whether to throw an error on an invalid IP.
- * @returns {string|null} The sanitized IPv4 address, or null if validation fails and error_on_invalid is false.
- * @throws {Error} If the IP address is not provided or invalid when error_on_invalid is true.
- */
-export const sanetise_ipv4 = ( { ip, validate=false, error_on_invalid=false } ) => {
-
-    // Ensure ip was provided
-    if( !ip ) throw new Error( 'IP address is required' )
-
-    // Sanetise ip address as string
-    ip = sanetise_string( ip )
-
-    // Remove ipv6 prefix if present
-    ip = ip.replace( '::ffff:', '' )
-
-    // Check if the IP address is valid
-    if( validate && !is_ipv4( ip ) ) {
-        if( error_on_invalid ) throw new Error( `Invalid IPv4 address: ${ ip }` )
-        return null
-    }
-
-    // Return the sanitized IP address
-    return ip
-
-}
 
 /**
  * Checks if an object contains all the required properties.
