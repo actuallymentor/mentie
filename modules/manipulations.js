@@ -1,4 +1,4 @@
-import { is_ipv4 } from "./validations"
+import { is_ipv4 } from "./validations.js"
 
 /**
  * Shuffle an array using the Fisher-Yates algorithm.
