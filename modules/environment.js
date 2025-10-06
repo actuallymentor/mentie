@@ -75,7 +75,7 @@ env.node_loglevel = () => env.is_node() && ( process.env?.LOGLEVEL || process.en
  * Retrieves the effective log level based on the environment. Defaults to 'info' in development environments, 'error' otherwise.
  * @returns {string} The determined log level.
  */
-env.loglevel = () => env.web_loglevel() || env.node_loglevel() || env.dev() ? 'info' : 'error'
+env.loglevel = () => env.web_loglevel() || env.node_loglevel() || ( env.dev() ? 'info' : 'error' )
 
 /**
  * Retrieves the log annotations set via URL parameters in a web environment.
