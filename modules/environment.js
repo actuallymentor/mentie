@@ -238,10 +238,11 @@ export const loglevel = env.loglevel()
 export const log_environment = logger => {
 
     // Environment trail
-    const env = {
+    const _env = {
         web: {
             is_web,
             loglevel: web_loglevel,
+            web_loglevel: env.web_loglevel(),
             window: typeof window !== 'undefined' && window,
             search: typeof location !== 'undefined' && location.search,
             platform: {
@@ -256,18 +257,19 @@ export const log_environment = logger => {
         node: {
             is_node,
             loglevel: node_loglevel,
-            process: typeof process !== 'undefined' && process
+            process: typeof process !== 'undefined' && process,
+            node_loglevel: env.node_loglevel()
         },
         environment: {
             dev,
             is_emulator,
             is_cypress,
-            loglevel
+            loglevel: env.loglevel()
         }
     }
 
     // Log the environment
     if( !logger ) logger = console.log
-    logger( 'Environment:', env )
+    logger( 'Environment:', _env )
 
 }
