@@ -8,7 +8,7 @@ const should_log = levels => {
     const loglevel = env.loglevel()
 
     // Check if the loglevel matches this call
-    const valid_levels = [ 'chatter', 'info', 'warn', 'error' ]
+    const valid_levels = [ 'debug', 'info', 'warn', 'error' ]
 
     // Check if the loglevel is valid
     if( !valid_levels.includes( loglevel ) ) console.warn( `Invalid log level: ${ loglevel }` )
@@ -120,13 +120,13 @@ export function log( ...messages ) {
 
 /**
  * Extremely verbose logs that you should probably never use.
- * Only logs if ?loglevel= or LOG_LEVEL= is set to: 'chatter'
+ * Only logs if ?loglevel= or LOG_LEVEL= is set to: 'debug'
  * 🎯 Goal: log extremely verbose messages that you probably don't want to see
  */
-log.chatter = function( ...messages ) {
+log.debug = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'chatter' ]
+    const levels = [ 'debug' ]
 
     // Log the messages if the loglevel matches
     if( should_log( levels ) ) {
@@ -153,7 +153,7 @@ log.chatter = function( ...messages ) {
 log.info = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'info', 'chatter' ]
+    const levels = [ 'info', 'debug' ]
 
     // Log the messages if the loglevel matches
     if( env.is_emulator() || should_log( levels ) ) {
@@ -178,7 +178,7 @@ log.info = function( ...messages ) {
 log.warn = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'warn', 'info', 'chatter' ]
+    const levels = [ 'warn', 'info', 'debug' ]
 
     // Log the messages if the loglevel matches
     if( dev || should_log( levels ) ) {
@@ -203,7 +203,7 @@ log.warn = function( ...messages ) {
 log.error = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'error', 'warn', 'info', 'chatter' ]
+    const levels = [ 'error', 'warn', 'info', 'debug' ]
     if( !should_log( levels ) ) return
 
     // Annotate the provided messages
