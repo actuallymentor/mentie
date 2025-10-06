@@ -8,7 +8,7 @@ const should_log = levels => {
     const loglevel = env.loglevel()
 
     // Check if the loglevel matches this call
-    const valid_levels = [ 'info', 'warn', 'error' ]
+    const valid_levels = [ 'chatter', 'info', 'warn', 'error' ]
 
     // Check if the loglevel is valid
     if( !valid_levels.includes( loglevel ) ) console.warn( `Invalid log level: ${ loglevel }` )
@@ -119,6 +119,31 @@ export function log( ...messages ) {
 }
 
 /**
+ * Extremely verbose logs that you should probably never use.
+ * Only logs if ?loglevel= or LOG_LEVEL= is set to: 'chatter'
+ * 🎯 Goal: log extremely verbose messages that you probably don't want to see
+ */
+log.chatter = function( ...messages ) {
+
+    // Check if the loglevel matches this call
+    const levels = [ 'chatter' ]
+
+    // Log the messages if the loglevel matches
+    if( should_log( levels ) ) {
+
+        // Annotate the provided messages
+        messages = annotate_messages( messages )
+
+        // Log the messages
+        console.log( '💬 ', ...messages )
+
+    }
+    
+}
+
+
+
+/**
  * Logs the provided info messages to the console.
  * Only logs in firebase emulator or if ?loglevel= or LOG_LEVEL= is set to: 'info'
  * 🎯 Goal: log info trace messages used only for extremely granular debugging
@@ -128,7 +153,7 @@ export function log( ...messages ) {
 log.info = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'info' ]
+    const levels = [ 'info', 'chatter' ]
 
     // Log the messages if the loglevel matches
     if( env.is_emulator() || should_log( levels ) ) {
@@ -153,7 +178,7 @@ log.info = function( ...messages ) {
 log.warn = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'warn', 'info' ]
+    const levels = [ 'warn', 'info', 'chatter' ]
 
     // Log the messages if the loglevel matches
     if( dev || should_log( levels ) ) {
@@ -178,7 +203,7 @@ log.warn = function( ...messages ) {
 log.error = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'error', 'warn', 'info' ]
+    const levels = [ 'error', 'warn', 'info', 'chatter' ]
     if( !should_log( levels ) ) return
 
     // Annotate the provided messages
