@@ -8,7 +8,7 @@ const should_log = levels => {
     const loglevel = env.loglevel()
 
     // Check if the loglevel matches this call
-    const valid_levels = [ 'debug', 'info', 'warn', 'error' ]
+    const valid_levels = [ 'insane', 'debug', 'info', 'warn', 'error' ]
 
     // Check if the loglevel is valid
     if( !valid_levels.includes( loglevel ) ) console.warn( `Invalid log level: ${ loglevel }` )
@@ -119,14 +119,14 @@ export function log( ...messages ) {
 }
 
 /**
- * Extremely verbose logs that you should probably never use.
- * Only logs if ?loglevel= or LOG_LEVEL= is set to: 'debug'
+ * Insanely verbose logs that you should probably never use.
+ * Only logs if ?loglevel= or LOG_LEVEL= is set to: 'insane'
  * 🎯 Goal: log extremely verbose messages that you probably don't want to see
  */
-log.debug = function( ...messages ) {
+log.insane = function( ...messages ) {
 
     // Check if the loglevel matches this call
-    const levels = [ 'debug' ]
+    const levels = [ 'insane' ]
 
     // Log the messages if the loglevel matches
     if( should_log( levels ) ) {
@@ -135,7 +135,30 @@ log.debug = function( ...messages ) {
         messages = annotate_messages( messages )
 
         // Log the messages
-        console.log( '💬 ', ...messages )
+        console.log( '🌪️ ', ...messages )
+
+    }
+    
+}
+
+/**
+ * Very verbose debug logs
+ * Only logs if ?loglevel= or LOG_LEVEL= is set to: 'debug'
+ * 🎯 Goal: log extremely verbose messages that you probably don't want to see
+ */
+log.debug = function( ...messages ) {
+
+    // Check if the loglevel matches this call
+    const levels = [ 'debug', 'insane' ]
+
+    // Log the messages if the loglevel matches
+    if( should_log( levels ) ) {
+
+        // Annotate the provided messages
+        messages = annotate_messages( messages )
+
+        // Log the messages
+        console.log( '🐛 ', ...messages )
 
     }
     
