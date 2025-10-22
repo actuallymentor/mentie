@@ -3,13 +3,16 @@
  *
  * @param {number} number - The number to round.
  * @param {number} [decimals=4] - The number of decimals to round to. Default is 4.
+ * @param {string} [direction] - The direction to round ('up' or 'down'). If not specified, standard rounding is used.
  * @returns {number} The rounded number.
  */
-export const round_number_to_decimals = ( number, decimals=4 ) => {
+export const round_number_to_decimals = ( number, decimals=4, direction ) => {
 
     if( number == undefined ) return ''
 
     const factor = 10 ** decimals
+    if( direction === 'up' ) return Math.ceil( number * factor ) / factor
+    if( direction === 'down' ) return Math.floor( number * factor ) / factor
     return Math.round( number * factor ) / factor
 }
 
