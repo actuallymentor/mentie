@@ -48,6 +48,110 @@ export function cache( key, value, expires_in_ms=Infinity ) {
 }
 
 /**
+ * Merges a value into the cached value at the specified key.
+ * If the cached value is an object, it merges the properties.
+ * If the cached value is an array, it appends the new values.
+ * If the cached value is a number, it increments by the new value.
+ * If the cached value is a string, it appends the new string.
+ * For other types, it overwrites the cached value.
+ *
+ * @param {string} key - The key of the cached value to merge into.
+ * @param {*} value - The value to merge into the cached value.
+ * @param {number} [expires_in_ms=Infinity] - The expiration time in milliseconds for the merged value (optional).
+ * @returns {*} The merged cached value.
+ */
+cache.merge = ( key, value, expires_in_ms=Infinity ) => {
+
+    // Get type of value
+    const type = Array.isArray( value ) ? 'array' : typeof value
+
+    // If array, append
+    if( type === 'array' ) {
+
+        // Get current array
+        let existing_value = cache( key ) || []
+
+        // If existing value is not an array, log a warning and overwrite
+        if( !Array.isArray( existing_value ) ) {
+            log.warn( `Cache key ${ key } is not an array, overwriting with new array value` )
+            existing_value = []
+        }
+
+        // Append new values
+        const new_value = [ ...existing_value, ...value ]
+
+        // Save merged array to cache
+        return cache( key, new_value, expires_in_ms )
+
+    }
+
+    // If object, merge
+    if( type === 'object' ) {
+
+        // Get current object
+        let existing_value = cache( key ) || {}
+
+        // If existing value is not an object, log a warning and overwrite
+        if( typeof existing_value !== 'object' || Array.isArray( existing_value ) ) {
+            log.warn( `Cache key ${ key } is not an object, overwriting with new object value` )
+            existing_value = {}
+        }
+
+        // Merge objects
+        const new_value = { ...existing_value, ...value }
+
+        // Save merged object to cache
+        return cache( key, new_value, expires_in_ms )
+
+    }
+
+    // If number, increment
+    if( type === 'number' ) {
+
+        // Get current number
+        let existing_value = cache( key ) || 0
+
+        // If existing value is not a number, log a warning and overwrite
+        if( typeof existing_value !== 'number' ) {
+            log.warn( `Cache key ${ key } is not a number, overwriting with new number value` )
+            existing_value = 0
+        }
+
+        // Increment number
+        const new_value = existing_value + value
+
+        // Save incremented number to cache
+        return cache( key, new_value, expires_in_ms )
+
+    }
+
+    // If string, append
+    if( type === 'string' ) {
+
+        // Get current string
+        let existing_value = cache( key ) || ''
+
+        // If existing value is not a string, log a warning and overwrite
+        if( typeof existing_value !== 'string' ) {
+            log.warn( `Cache key ${ key } is not a string, overwriting with new string value` )
+            existing_value = ''
+        }
+
+        // Append string
+        const new_value = existing_value + value
+
+        // Save appended string to cache
+        return cache( key, new_value, expires_in_ms )
+
+    }
+
+    // For other types, just overwrite
+    log.warn( `Cache.merge() does not support type ${ type }, overwriting value for key ${ key }` )
+    return cache( key, value, expires_in_ms )
+
+}
+
+/**
  * Restores the cache from a given cache object.
  * If the cache object is empty, it will overwrite the current cache.
  * If the cache object has keys that already exist in the current cache, those keys will be skipped.
